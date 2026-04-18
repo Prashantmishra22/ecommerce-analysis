@@ -4,23 +4,35 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from scipy.stats import ttest_ind
-df = pd.read_csv("D:\games1\ecommerce_data.csv")
+from scipy.stats import ttest_ind, norm
+import numpy as np
+
+df = pd.read_csv(r"D:\games1\ecommerce_data.csv")
 male = df[df['gender'] == 'Male']['purchase']
 female = df[df['gender'] == 'Female']['purchase']
 
-t_stat, p_value = ttest_ind(male, female)
+# T-test
+t_stat, t_p = ttest_ind(male, female)
 
-print("T-Statistic:", t_stat)
-print("P-Value:", p_value)
+# Z-test
+mean1, mean2 = male.mean(), female.mean()
+std1, std2 = male.std(), female.std()
+n1, n2 = len(male), len(female)
 
-# Visualization
-plt.figure()
-sns.boxplot(x='gender', y='purchase', data=df)
-plt.title("Gender vs Purchase")
-plt.show()
+se = np.sqrt((std1**2/n1) + (std2**2/n2))
+z_stat = (mean1 - mean2) / se
+z_p = 2 * (1 - norm.cdf(abs(z_stat)))
 
-plt.figure()
-sns.barplot(x='gender', y='purchase', data=df)
+print("T-test p-value:", t_p)
+print("Z-test p-value:", z_p)
+
+# Boxplot
+import matplotlib.pyplot as plt
+
+# Purchase rate by gender
+df.groupby('gender')['purchase'].mean().plot(kind='bar')
+
 plt.title("Purchase Rate by Gender")
+plt.xlabel("Gender")
+plt.ylabel("Purchase Rate")
 plt.show()
