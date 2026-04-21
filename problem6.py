@@ -1,6 +1,6 @@
-#  Overall Dashboard
-# Goal: Complete data understanding
 
+# Goal: Complete data understanding#
+# “Comprehensive Analysis of Factors Influencing Purchase Behavior Using Data Visualization”
 
 import pandas as pd
 import matplotlib.pyplot as plt
